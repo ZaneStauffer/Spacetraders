@@ -11,7 +11,7 @@ from errors import ResponseException
 
 FILE_SIZE_LIMIT_MB = 1 #MB
 
-def execute(file_path, client, args):
+def execute(file_path, client, args, result={}):
     print(spacetraders.__file__)
     # We need to pass the client to the script so it can use the API
     _scr_client = client
@@ -39,7 +39,7 @@ def execute(file_path, client, args):
                     g=logger.colorize(_global_keys, Fore.WHITE),
                     a=logger.colorize(str(_globals["args"]), Fore.WHITE)
                 ), should_save=True)
-                exec(compile(scr_ast, filename=file_path, mode='exec'), _globals)
+                exec(compile(scr_ast, filename=file_path, mode='exec'), _globals, result)
             else: # If False or None, propagate error
                 # TODO: this error doesnt give much info about the error itself (line number, etc)
                 raise SyntaxError("Unable to compile file", scr_ast)

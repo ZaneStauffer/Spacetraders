@@ -73,7 +73,10 @@ class Session:
             self._list()
         try:
             script_path = "../scripts/" + script
-            executor.execute(script_path, self.client, args)
+            result = {}
+            executor.execute(script_path, self.client, args, result)
+            print(result["result"])
+            
         except py_compile.PyCompileError as e:
             raise e
         except FileNotFoundError as e: # Also, list all available scripts
