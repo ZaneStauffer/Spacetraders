@@ -1,9 +1,3 @@
-Modules/Files to add
-- Logger
-- Config w/ token (take token from env? or config file? or arg?)
-- Database if we use one
-- Command handler or means to execute 
-
 =================
 ====== CLI ======
 =================
@@ -11,25 +5,22 @@ CLI manages all user input and interface
 commands:
 - help: list commands and scripts
 - run [script]: run a script
-- list: list all scripts
+- list: list all scripts and their metadata
 - exit: exit the program
 - processes: list all running processes
 - token [token]: set the token
-allow running of scripts by simply file name (no run command)
 
 =================
 ==== LOGGER =====
 =================
-
-TODO: Log timestamps from response to log. Automatically log whenever a request is made
+TODO: Log timestamps from response to log. Automatically log whenever a request is made (juicy data)
+TODO: Saving to logfile
 
 =================
 ==== CONFIG =====
 =================
-
-=================
-=== SERIALIZE ===
-=================
+Using simple .env file for now
+os.getenv() to fetch env var
 
 =================
 ===== ERROR =====
@@ -38,25 +29,21 @@ TODO: Log timestamps from response to log. Automatically log whenever a request 
 =================
 ===== TESTS =====
 =================
+TODO: Implement pytest
 
 =================
 === SCRIPTING ===
 =================
-we can use exec() to execute a string as python code. we can use this to execute scripts
-maybe we can execute it in a differnet thread / process?
-json.loads() to convert string to a dict
-
-pass client to script (via executor)
-- Communication between scripts? (concurrency + database?)
-
 FINISHED: Pass arguments to script from CLI
-TODO: Allow scripts to return values
-TODO: Script metadata (name, description, etc)
+FINISHED: Allow scripts to return values
+TODO: Script metadata (name, description, etc) <- Use docstrings for this
 TODO: Run scripts from other scripts
 TODO: Spawn process for scripts (concurrency)
-FIXME: Executor should catch all exceptions and log them (or pass them to the script)
+FIXME: Executor should catch ALL exceptions and log them
 
 =================
 === DATABASE ====
 =================
+TODO: Implement database
+TODO: Implement caching middleware (low priority)
 
