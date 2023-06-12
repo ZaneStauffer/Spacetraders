@@ -5,7 +5,7 @@ from spacetraders.types import Response
 import sys
 import os
 import json
-from pprint import pprint
+from dotenv import load_dotenv
 
 import executor
 import logger
@@ -14,10 +14,30 @@ from cli import Session
 def main():
     logger.log("INITIALIZING NEUROMORPHIC CORE...")
     # temp token lol (add to config file later)
-    TOKEN = "eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZGVudGlmaWVyIjoiQVJDSEFOR0VMLTAxIiwidmVyc2lvbiI6InYyIiwicmVzZXRfZGF0ZSI6IjIwMjMtMDYtMTAiLCJpYXQiOjE2ODY0MzI2MTYsInN1YiI6ImFnZW50LXRva2VuIn0.pyNY00OyI7d75u75w3JUUJxuVip9BCWYX8My-lVodkdSVS0gbGUgB6ZkBIRtyDtVWolArUIhksz-pWDZHZ-8nOybA9GfMi_KtVeO58yPUVlMqfWUhqw5IkZ67jG39PE1RmDy6_W39GUN0ejPveTH5L_sjXavIQmR5SrzU4XQOuV2bAWzYQHbS-jNX86AVCa5NDBe69aorZV9n77P8J2FHdDALBwjETGIInl5okLkY5-1cfp7gaS3XkkamPmfxvT7kkxy3st4hc9mcWm3St8O6xES2k4YoIHO100Y5QsnrhMAf9KV99V0I3xUoRU6exYT_YolsopbnEMxXwI0-uFJ4g"
+    load_dotenv()
     logger.log("Instantiating Seraph translation virtue...")
     logger.log("ARCHANGEL.RAZIEL: Greetings, user. I am now instatiating the client credentials.")
-    client = AuthenticatedClient(base_url="https://api.spacetraders.io/v2", token=TOKEN)
+    # if .env file is not found, create it
+    if not os.path.isfile(".env"):
+        logger.log("ARCHANGEL.RAZIEL: No .env file found. Creating one now...", should_save=True)
+        _usr_token = input("ARCHANGEL.RAZIEL: Please enter your spacetraders API token: ")
+        # check if token is valid
+        client = AuthenticatedClient(base_url="https://api.spacetraders.io/v2", token=_usr_token)
+        
+        if client.agents.get_my_agent().status_code != 200: # If token is invalid
+            logger.log("ARCHANGEL.RAZIEL: Invalid token. Please try again.")
+            sys.exit(1)
+        
+        try:
+            ENV_PATH = os.path.join(os.path.dirname(__file__), "../.env")
+            with open(ENV_PATH, "w") as f: # create .env file
+                f.write("TOKEN="+_usr_token)
+                logger.log("ARCHANGEL.RAZIEL: I have created the .env file.", should_save=True)
+        except Exception as e: # If token is invalid
+            logger.log("ARCHANGEL.RAZIEL: Invalid token. Please try again.")
+            sys.exit(1)
+        
+    client = AuthenticatedClient(base_url="https://api.spacetraders.io/v2", token=os.getenv("TOKEN"))
     
     # get agent data
     response: Response[GetMyAgentResponse200] = client.agents.get_my_agent()
