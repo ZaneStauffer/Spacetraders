@@ -49,11 +49,19 @@ class Session:
                 "usage": "list",
                 "func": self._list,
                 "args": []
+            },
+            "register": {
+                "desc": "Registers a new agent and updates the client",
+                "usage": "register <symbol>",
+                "func": self._register,
+                "args": ["symbol"]
             }
 
         }
         just_fix_windows_console()
 
+    def _register(self, symbol):
+        pass
    
     def _help(self):
         print(logger.colorize("Available commands:", Fore.YELLOW))
