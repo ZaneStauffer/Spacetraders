@@ -36,8 +36,8 @@ TODO: Implement pytest
 =================
 FINISHED: Pass arguments to script from CLI
 FINISHED: Allow scripts to return values
-TODO: Script metadata (name, description, etc) <- Use docstrings for this
-TODO: Run scripts from other scripts
+FINISHED: Script metadata (name, description, etc) <- Use docstrings for this
+TODO: ALMOST FINISHED: Run scripts from other scripts <- TEST MORE, LOG FROM WHICH CONTEXT IT IS CALLING IF POSSIBLE
 TODO: Spawn process for scripts (concurrency)
 FIXME: Executor should catch ALL exceptions and log them
 

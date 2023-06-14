@@ -23,6 +23,8 @@ def execute(file_path, client, args, result={}):
         "args" : args,
         "unwrap": unwrap,
         "ResponseException": ResponseException,
+        #FIXME: v v v 
+        "execute": execute,
     }
     # FIXME: Currently, the token field of the client object can be accessed from the script.
     # This is a security issue. We need to find a way to restrict access to the token field.
