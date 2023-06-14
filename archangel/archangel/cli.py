@@ -3,6 +3,7 @@ from colorama import Fore, Back, Style
 import logger
 import py_compile
 import executor
+import re
 from errors import *
 
 # Command line interface module for Archangel CLI
@@ -72,7 +73,11 @@ class Session:
     def _list(self):
         print(logger.colorize("Available scripts:", Fore.YELLOW))
         for script_name in executor.get_scripts():
-            print("\t" + script_name)
+            print("\t" + logger.colorize(script_name, Fore.GREEN))
+            # Print their docstring with _get_docstring
+            docstring = self._get_docstring("../scripts/" + script_name)
+            if docstring is not None:
+                print("\t\t" + docstring.replace("\n", "\n\t\t"))    
 
     # Runs a given script
     # args is a list of arguments to pass to the script
@@ -120,6 +125,25 @@ class Session:
     def _parse_command(self, command_str):
         result = command_str.split()
         return (result[0], result[1:])
+    
+    # If we claim to be without sin, we deceive ourselves and the truth is not in us. 
+    # If we confess our sins, he is faithful and just and will forgive us our sins and purify us from all unrighteousness.
+    # If we claim we have not sinned, we make him out to be a liar and his word is not in us.
+    # 1 John 1:8-10
+    # anyways here's docstring
+    # -> str
+    def _get_docstring(self, script):
+        if script is not None:
+            with open(script, 'r') as _scr_file:
+                _text = _scr_file.read()
+                _docstring = r'\"\"\"([\s\S]*?)\"\"\"' # Regex for docstring
+                _search = re.search(_docstring, _text)
+                if _search is not None:
+                    _docstring = _search.group(1)
+                else:
+                    _docstring = None
+                    
+                return _docstring
     
      # Starts the CLI loop and waits for user input
     def start(self):

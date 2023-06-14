@@ -69,7 +69,7 @@ def main():
             ),
         should_save=True
     )
-    
+
     usr_session = Session(client)
     usr_session.start()
 
