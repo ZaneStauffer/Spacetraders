@@ -3,6 +3,7 @@ import os
 import py_compile
 import ast
 import spacetraders
+import inspect
 from colorama import Fore, Back, Style
 # This module executes user scripts. It validates them, restricts size, spawns a new process, and executes it while providing API
 import logger
@@ -23,7 +24,6 @@ def execute(file_path, client, args, result={}):
         "args" : args,
         "unwrap": unwrap,
         "ResponseException": ResponseException,
-        #FIXME: v v v 
         "execute": execute,
     }
     # FIXME: Currently, the token field of the client object can be accessed from the script.
@@ -36,10 +36,13 @@ def execute(file_path, client, args, result={}):
                 # Execute script
                 # TODO: spawn new process
                 _global_keys = str(list(_globals.keys()))
-                logger.log("Executing {f} with globals {g} and args {a}".format(
+                frm = inspect.stack()[1]
+                mod = inspect.getmodule(frm[0])
+                logger.log("Executing {f} in context {c} with globals {g} and args {a}".format(
                     f=logger.colorize(file_path, Fore.WHITE),
                     g=logger.colorize(_global_keys, Fore.WHITE),
-                    a=logger.colorize(str(_globals["args"]), Fore.WHITE)
+                    a=logger.colorize(str(_globals["args"]), Fore.WHITE),
+                    c=logger.colorize(str(mod.__name__), Fore.WHITE)
                 ), should_save=True)
                 exec(compile(scr_ast, filename=file_path, mode='exec'), _globals, result)
             else: # If False or None, propagate error
