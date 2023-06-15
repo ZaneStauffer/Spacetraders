@@ -73,24 +73,6 @@ def main():
     usr_session = Session(client)
     usr_session.start()
 
-    
-    # try:
-    #     if(len(sys.argv) > 1): # If file path is provided, execute it
-    #         script_path = "../scripts/" + sys.argv[1]
-    #         executor.execute(script_path, client)
-    #     else:
-    #         # Open CLI if no file path is provided
-    #         while True:
-    #             try:
-    #                 script_path = "../scripts/" + input("[SCRIPT]> ")
-    #                 executor.execute(script_path, client) # Prompt user for script path
-    #             except OSError as e:
-    #                 logger.log("ARCHANGEL.RAZIEL: {0}".format(str(e)), should_save=True)
-    # except Exception as e:
-    #     logger.log("ARCHANGEL.RAZIEL: {0}".format(str(e)), should_save=True)
-    #     exit(1)
-
 if __name__ == "__main__":
-    # TODO: pass client to executor and use it in the script
     main()
 
