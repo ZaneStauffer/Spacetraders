@@ -13,8 +13,7 @@ from cli import Session
 
 def main():
     logger.log("INITIALIZING NEUROMORPHIC CORE...")
-    # temp token lol (add to config file later)
-    load_dotenv()
+    # temp token lol (add to config file later))
     logger.log("Instantiating Seraph translation virtue...")
     logger.log("ARCHANGEL.RAZIEL: Greetings, user. I am now instatiating the client credentials.")
     # if .env file is not found, create it
@@ -29,14 +28,15 @@ def main():
             sys.exit(1)
         
         try:
-            ENV_PATH = os.path.join(os.path.dirname(__file__), "../.env")
+            ENV_PATH = os.path.join(os.path.dirname(__file__), ".env")
             with open(ENV_PATH, "w") as f: # create .env file
                 f.write("TOKEN="+_usr_token)
                 logger.log("ARCHANGEL.RAZIEL: I have created the .env file.", should_save=True)
         except Exception as e: # If token is invalid
             logger.log("ARCHANGEL.RAZIEL: Invalid token. Please try again.")
             sys.exit(1)
-        
+    
+    load_dotenv()
     client = AuthenticatedClient(base_url="https://api.spacetraders.io/v2", token=os.getenv("TOKEN"))
     
     # get agent data

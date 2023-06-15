@@ -71,8 +71,6 @@ def _validate_file_size(file_path, size_mb=1):
 # Compiles the file into an AST and returns it. Propagates error  if unable to compile
 def _validate_compile(file_path):
     try:
-        logger.log("Compiling file...")
-        #_script = py_compile.compile(file_path, doraise=True)
         _script = ast.parse(open(file_path).read(), filename=file_path, mode='exec')
         return _script
     except py_compile.PyCompileError as e:
