@@ -9,12 +9,24 @@ commands:
 - exit: exit the program
 - processes: list all running processes
 - token [token]: set the token
+- exec: allows for execution of arbitrary python code in the context of the CLI (for debugging)
+
+TODO: token
+TODO: exec
+TODO: processes
+TODO: autocomplete for commands and scripts (tab completion)
 
 =================
 ==== LOGGER =====
 =================
 TODO: Log timestamps from response to log. Automatically log whenever a request is made (juicy data)
 TODO: Saving to logfile
+
+===== DATA =====
+(name pending) this submodule logs data in JSON format for creation of a common training datasets.
+should log every request and response, and allow for easy filtering of data.
+should also log metadata about the script that was run, and the context in which it was run.
+should log all game actions that the agent takes, and the results of those actions.
 
 =================
 ==== CONFIG =====
