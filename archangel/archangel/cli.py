@@ -72,7 +72,10 @@ class Session:
     def _exec_usr_code(self): 
         print(logger.colorize("<:: BE CAREFUL WHEN EXECUTING ARBITRARY CODE ::>", Fore.RED))
         _globals = executor.get_globals(self.client) # get the global scope of executor
-        code.interact(local=_globals) # start the interactive console with the global scope of executor
+        code.interact(local=_globals,
+                    banner=logger.colorize("ARCHANGEL.LUCIFER: ", Fore.RED) + "Beginning interactive ARCHANGEL instance, opening interface...",
+                    exitmsg=logger.colorize("ARCHANGEL.LUCIFER: ", Fore.RED) + "Exiting instance."
+        ) # start the interactive console with the global scope of executor
 
     def _register(self, symbol):
         pass
