@@ -12,13 +12,10 @@ from errors import ResponseException
 
 FILE_SIZE_LIMIT_MB = 1 #MB
 
-def execute(file_path, client, args, result={}):
-    print(spacetraders.__file__)
-    # We need to pass the client to the script so it can use the API
-    _scr_client = client
-    #_locals = locals() # includes _scr_client
+#TODO: make class if needs to be mutable
+def get_globals(client, args=[], result={}):
     _globals = {
-        "client": _scr_client,
+        "client": client,
         "logger": logger,
         "spacetraders": spacetraders,
         "args" : args,
@@ -26,6 +23,14 @@ def execute(file_path, client, args, result={}):
         "ResponseException": ResponseException,
         "execute": execute,
     }
+    return _globals
+
+# TODO: append base path to file path
+def execute(file_path, client, args, result):
+    # We need to pass the client to the script so it can use the API
+    _scr_client = client
+    #_locals = locals() # includes _scr_client
+    _globals = get_globals(client, args, result)
     # FIXME: Currently, the token field of the client object can be accessed from the script.
     # This is a security issue. We need to find a way to restrict access to the token field.
 
@@ -47,9 +52,7 @@ def execute(file_path, client, args, result={}):
                     f=logger.colorize(file_path, Fore.WHITE),
                     g=logger.colorize(_global_keys, Fore.WHITE),
                     a=logger.colorize(str(_globals["args"]), Fore.WHITE),
-                    # v v v fix this FIXME:
                     c=logger.colorize(context_name, Fore.WHITE)
-                    #c=logger.colorize(str(mod.__name__), Fore.WHITE)
                 ), should_save=True)
                 exec(compile(scr_ast, filename=file_path, mode='exec'), _globals, result)
             else: # If False or None, propagate error

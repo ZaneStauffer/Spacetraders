@@ -4,6 +4,7 @@ import logger
 import py_compile
 import executor
 import re
+import code
 from errors import *
 
 # Command line interface module for Archangel CLI
@@ -56,10 +57,22 @@ class Session:
                 "usage": "register <symbol>",
                 "func": self._register,
                 "args": ["symbol"]
-            }
-
+            },
+            "exec": {
+                "desc": "Allows execution of arbitrary python code",
+                "usage": "exec",
+                "func": self._exec_usr_code,
+                "args": []
+            },
         }
         just_fix_windows_console()
+
+    # allows input and execution of arbitrary python code in the context of the cli
+    # we need to pass the global scope of executor to this function so that it can be used in the context of the cli
+    def _exec_usr_code(self): 
+        print(logger.colorize("<:: BE CAREFUL WHEN EXECUTING ARBITRARY CODE ::>", Fore.RED))
+        _globals = executor.get_globals(self.client) # get the global scope of executor
+        code.interact(local=_globals) # start the interactive console with the global scope of executor
 
     def _register(self, symbol):
         pass
