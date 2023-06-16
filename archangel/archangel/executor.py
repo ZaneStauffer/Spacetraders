@@ -36,13 +36,20 @@ def execute(file_path, client, args, result={}):
                 # Execute script
                 # TODO: spawn new process
                 _global_keys = str(list(_globals.keys()))
-                frm = inspect.stack()[1]
-                mod = inspect.getmodule(frm[0])
+                _filename = inspect.stack()[1].filename 
+                context_name = ""
+                if _filename is None:
+                    context_name = "unknown"
+                else:
+                    context_name = os.path.basename(_filename)
+              
                 logger.log("Executing {f} in context {c} with globals {g} and args {a}".format(
                     f=logger.colorize(file_path, Fore.WHITE),
                     g=logger.colorize(_global_keys, Fore.WHITE),
                     a=logger.colorize(str(_globals["args"]), Fore.WHITE),
-                    c=logger.colorize(str(mod.__name__), Fore.WHITE)
+                    # v v v fix this FIXME:
+                    c=logger.colorize(context_name, Fore.WHITE)
+                    #c=logger.colorize(str(mod.__name__), Fore.WHITE)
                 ), should_save=True)
                 exec(compile(scr_ast, filename=file_path, mode='exec'), _globals, result)
             else: # If False or None, propagate error
