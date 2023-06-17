@@ -64,7 +64,9 @@ TODO: Implement caching middleware (low priority)
 ====== GAME =====
 =================
 For scripts that run game actions
+TODO: display_system.py: Display current system in a nice way (show all waypoints, etc)
+TODO: display_ship.py: Display current ship in a nice way (fuel, cargo, etc)
 TODO: Route planning script (heuristic, A*?)
-TODO: Mining script
-TODO: Ship buying
-TODO: Refuelling
+TODO: Mining script (mine asteroids, sell ore)
+TODO: Ship buying script (buy ships)
+TODO: Refuelling script (buy fuel)
