@@ -50,6 +50,7 @@ FINISHED: Pass arguments to script from CLI
 FINISHED: Allow scripts to return values
 FINISHED: Script metadata (name, description, etc) <- Use docstrings for this
 FINISHED: Run scripts from other scripts & log their context
+TODO: executor.execute() filepath argument should append directory base "../scripts/" for cleaner calling in scripts
 TODO: Spawn process for scripts (concurrency)
 FIXME: Executor should catch ALL exceptions and log them
 
@@ -59,3 +60,11 @@ FIXME: Executor should catch ALL exceptions and log them
 TODO: Implement database
 TODO: Implement caching middleware (low priority)
 
+=================
+====== GAME =====
+=================
+For scripts that run game actions
+TODO: Route planning script (heuristic, A*?)
+TODO: Mining script
+TODO: Ship buying
+TODO: Refuelling
