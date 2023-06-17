@@ -11,30 +11,51 @@ import executor
 import logger
 from cli import Session
 
+def is_valid_token(token: str) -> bool:
+    _client = AuthenticatedClient(base_url="https://api.spacetraders.io/v2", token=token)
+    if _client.agents.get_my_agent().status_code != 200:
+        return False
+    return True
+
 def main():
     logger.log("INITIALIZING NEUROMORPHIC CORE...")
     # temp token lol (add to config file later))
     logger.log("Instantiating Seraph translation virtue...")
     logger.log("ARCHANGEL.RAZIEL: Greetings, user. I am now instatiating the client credentials.")
+
+    client = None
+    # check env file for valid token
+    if os.path.isfile(".env"):
+        load_dotenv()
+        _usr_token = os.getenv("TOKEN")
+        # test token to see if it's valid
+        if is_valid_token(_usr_token):
+            client = AuthenticatedClient(base_url="https://api.spacetraders.io/v2", token=_usr_token)
+        else:
+            client = None
+            
+
+    usr_session = Session(client)
+
     # if .env file is not found, create it
-    if not os.path.isfile(".env"):
-        logger.log("ARCHANGEL.RAZIEL: No .env file found. Creating one now...", should_save=True)
-        _usr_token = input("ARCHANGEL.RAZIEL: Please enter your spacetraders API token: ")
-        # check if token is valid
-        client = AuthenticatedClient(base_url="https://api.spacetraders.io/v2", token=_usr_token)
+    # if not os.path.isfile(".env"):
+    #     logger.log("ARCHANGEL.RAZIEL: No .env file found. Creating one now...", should_save=True)
+    #     _usr_token = input("ARCHANGEL.RAZIEL: Please enter your spacetraders API token: ")
+    #     # check if token is valid
+    #     client = AuthenticatedClient(base_url="https://api.spacetraders.io/v2", token=_usr_token)
         
-        if client.agents.get_my_agent().status_code != 200: # If token is invalid
-            logger.log("ARCHANGEL.RAZIEL: Invalid token. Please try again.")
-            sys.exit(1)
+    #     if client.agents.get_my_agent().status_code != 200: # If token is invalid
+    #         logger.log("ARCHANGEL.RAZIEL: Invalid token. Please try again.")
+    #         sys.exit(1)
         
-        try:
-            ENV_PATH = os.path.join(os.path.dirname(__file__), ".env")
-            with open(ENV_PATH, "w") as f: # create .env file
-                f.write("TOKEN="+_usr_token)
-                logger.log("ARCHANGEL.RAZIEL: I have created the .env file.", should_save=True)
-        except Exception as e: # If token is invalid
-            logger.log("ARCHANGEL.RAZIEL: Invalid token. Please try again.")
-            sys.exit(1)
+    #     try:
+    #         ENV_PATH = os.path.join(os.path.dirname(__file__), ".env")
+    #         with open(ENV_PATH, "w") as f: # create .env file
+    #             f.write("TOKEN="+_usr_token)
+    #             logger.log("ARCHANGEL.RAZIEL: I have created the .env file.", should_save=True)
+    #     except Exception as e: # If token is invalid
+    #         logger.log("ARCHANGEL.RAZIEL: Invalid token. Please try again.")
+    #         sys.exit(1)
     
     load_dotenv()
     client = AuthenticatedClient(base_url="https://api.spacetraders.io/v2", token=os.getenv("TOKEN"))
@@ -43,7 +64,12 @@ def main():
     response: Response[GetMyAgentResponse200] = client.agents.get_my_agent()
     # dict
     _res_dict = json.loads(response.content)
-    _ships_dict = json.loads(client.fleet.get_my_ships().content)["data"]
+    _ships_dict_content = json.loads(client.fleet.get_my_ships().content)
+    _ships_dict = list()
+    if _ships_dict_content["data"] == []:
+        _ships_dict = []
+    else:
+        _ships_dict = _ships_dict_content["data"]
     _names_list = list()
     for d in _ships_dict:
         for key, value in d.items():
@@ -70,7 +96,6 @@ def main():
         should_save=True
     )
 
-    usr_session = Session(client)
     usr_session.start()
 
 if __name__ == "__main__":

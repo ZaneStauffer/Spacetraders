@@ -1,3 +1,6 @@
+from spacetraders import AuthenticatedClient, Client
+from spacetraders.models import GetMyAgentResponse200, GetMyShipsResponse200
+from spacetraders.types import Response
 from colorama import just_fix_windows_console
 from colorama import Fore, Back, Style
 import logger
@@ -5,6 +8,8 @@ import py_compile
 import executor
 import re
 import code
+import os
+import requests
 from errors import *
 
 # Command line interface module for Archangel CLI
@@ -12,8 +17,44 @@ class Session:
     from colorama import just_fix_windows_console
     from colorama import Fore, Back, Style
 
-    def __init__(self, client):
-        self.client = client
+    # if client == None we must create a new client with http request to the server
+    #TODO: in main account for no token
+    def __init__(self, client=None):
+        if client != None:
+            self.client = client
+        else: # if there is no client
+            BASE_URL = "https://api.spacetraders.io/v2"
+            logger.log("ARCHANGEL.RAZIEL: Client token not found. Registering new agent...")
+            _state = True
+            while _state:
+                usr_agent_symbol = input("ARCHANGEL.RAZIEL: Please enter your agent symbol: ")
+                # TODO: list factions and their descriptions (from spacetraders api)
+                usr_agent_faction = input("ARCHANGEL.RAZIEL: Please enter your agent faction: ")
+                r = requests.post(BASE_URL + "/register", json={"symbol": usr_agent_symbol, "faction": usr_agent_faction.upper()})
+                print(r.json())
+                if r.status_code != 201: # 201 = created
+                    print("ARCHANGEL.RAZIEL: Invalid agent symbol or faction.")
+                else:
+                    response = r.json()
+                    agent_token = response["data"]["token"]
+                    self.client = AuthenticatedClient(base_url=BASE_URL, token=agent_token)
+                    logger.log("ARCHANGEL.RAZIEL: Agent {} registered successfully with faction {}. Saving token to .env file..."
+                        .format(logger.colorize(usr_agent_symbol, Fore.WHITE),
+                                logger.colorize(usr_agent_faction.upper(), Fore.WHITE)
+                                ),
+                        should_save=True)
+                    # update env file with new token (if it exists)
+                    try:
+                        ENV_PATH = ".env"
+                        with open(ENV_PATH, "w") as f: # create .env file
+                            f.truncate(0) # clear file
+                            f.write("TOKEN="+agent_token) # write token to file
+                            logger.log("ARCHANGEL.RAZIEL: I have updated the .env file.", should_save=True)
+                    except Exception as e: #file error 
+                        print(e)
+                        exit(1)
+                    _state = False # exit loop
+
         self.state = True
         self.commands = {
             "help": {
@@ -77,8 +118,12 @@ class Session:
                     exitmsg=logger.colorize("ARCHANGEL.LUCIFER: ", Fore.RED) + "Exiting instance."
         ) # start the interactive console with the global scope of executor
 
+    # attempts to register a new agent with the given symbol and updates the client
     def _register(self, symbol):
-        pass
+        try:
+            self.client = AuthenticatedClient.register(symbol)
+        except Exception as e:
+            raise e
    
     def _help(self):
         print(logger.colorize("Available commands:", Fore.YELLOW))
