@@ -25,7 +25,8 @@ capacity = int(args[1])
 length = capacity if len(args) < 3 else int(args[2])
 # Values
 # [current/capacity] full_blocksempty_blocks percentage%
-percentage = (current / capacity) * 100
+# handle divisin by zero
+percentage = (current / capacity) * 100 if capacity != 0 else 0
 full_blocks = int((percentage / 100) * length)
 empty_blocks = length - full_blocks
 # Format the bar
