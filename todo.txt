@@ -10,9 +10,12 @@ commands:
 - processes: list all running processes
 - token [token]: set the token
 - exec: allows for execution of arbitrary python code in the context of the CLI (for debugging)
+- register: register a new agent and update the .env file with its token
 
 TODO: token
-TODO: exec
+COMPLETE: exec
+TODO: shorthand for run command (just script name)
+TODO: register
 TODO: processes
 TODO: autocomplete for commands and scripts (tab completion)
 
