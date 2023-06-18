@@ -263,3 +263,5 @@ def main():
         raise e
     
 main()
+# We set result to None so it wont print when ran from CLI
+result = None
