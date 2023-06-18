@@ -54,7 +54,7 @@ def execute(file_path, client, args, result):
                     g=logger.colorize(_global_keys, Fore.WHITE),
                     a=logger.colorize(str(_globals["args"]), Fore.WHITE),
                     c=logger.colorize(context_name, Fore.WHITE)
-                ), should_save=True)
+                ), should_save=True, print_to_console=False)
                 exec(compile(scr_ast, filename=file_path, mode='exec'), _globals, result)
             else: # If False or None, propagate error
                 # TODO: this error doesnt give much info about the error itself (line number, etc)
