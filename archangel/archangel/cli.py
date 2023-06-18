@@ -146,7 +146,7 @@ class Session:
             script_path = "../scripts/" + script
             result = {}
             executor.execute(script_path, self.client, args, result)
-            print(result["result"])
+            # print(result["result"])
             
         except py_compile.PyCompileError as e:
             raise e
