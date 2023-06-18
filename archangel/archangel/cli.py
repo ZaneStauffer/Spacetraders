@@ -95,9 +95,9 @@ class Session:
             },
             "register": {
                 "desc": "Registers a new agent and updates the client",
-                "usage": "register <symbol>",
+                "usage": "register <symbol> <faction>",
                 "func": self._register,
-                "args": ["symbol"]
+                "args": ["symbol", "faction"]
             },
             "exec": {
                 "desc": "Allows execution of arbitrary python code",
@@ -119,11 +119,8 @@ class Session:
         ) # start the interactive console with the global scope of executor
 
     # attempts to register a new agent with the given symbol and updates the client
-    def _register(self, symbol):
-        try:
-            self.client = AuthenticatedClient.register(symbol)
-        except Exception as e:
-            raise e
+    def _register(self, symbol, faction):
+        pass
    
     def _help(self):
         print(logger.colorize("Available commands:", Fore.YELLOW))
@@ -213,6 +210,10 @@ class Session:
             usr_command = self._parse_command(_input) # Parse the command
             if usr_command[0] == "run" and len(usr_command[1]) == 0: # Special case for run command
                 self._list()
+            elif usr_command[0].endswith(".py"): # Special case for running scripts
+                _scr_args = usr_command[1]
+                _full_args = [usr_command[0], *_scr_args] # Add the script name to the arguments
+                usr_command = ("run", _full_args) # Set the command to run
             try:
                 if self._validate_command(usr_command): # Validate the command
                     logger.log("Command {0} inputted with arguments {1}".format(
