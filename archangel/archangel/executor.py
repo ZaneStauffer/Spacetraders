@@ -22,6 +22,7 @@ def get_globals(client, args=[], result={}):
         "unwrap": unwrap,
         "ResponseException": ResponseException,
         "execute": execute,
+        "result": result
     }
     return _globals
 
