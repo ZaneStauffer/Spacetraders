@@ -19,6 +19,7 @@ TODO: register
 TODO: processes
 TODO: autocomplete for commands and scripts (tab completion)
 FIXME: index out of range when pressing enter on empty input (should just do nothing)
+TODO: Shorthand script execution in exec mode (just script name)
 
 =================
 ==== LOGGER =====
@@ -74,3 +75,4 @@ TODO: Route planning script (heuristic, A*?)
 TODO: Mining script (mine asteroids, sell ore)
 TODO: Ship buying script (buy ships)
 TODO: Refuelling script (buy fuel)
+TODO: get_waypoints.py: Get all waypoints in the current system
