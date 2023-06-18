@@ -4,6 +4,7 @@ import py_compile
 import ast
 import spacetraders
 import inspect
+import json
 from colorama import Fore, Back, Style
 # This module executes user scripts. It validates them, restricts size, spawns a new process, and executes it while providing API
 import logger
@@ -56,6 +57,10 @@ def execute(file_path, client, args, result):
                     c=logger.colorize(context_name, Fore.WHITE)
                 ), should_save=True, print_to_console=False)
                 exec(compile(scr_ast, filename=file_path, mode='exec'), _globals, result)
+                # If the script is being executed from the cli, print the result
+                if context_name == "cli.py" and result["result"] is not None:
+                    pretty_result = json.dumps(result["result"], indent=4)
+                    logger.log("{r}".format(r=logger.colorize(pretty_result, Fore.WHITE)))
             else: # If False or None, propagate error
                 # TODO: this error doesnt give much info about the error itself (line number, etc)
                 raise SyntaxError("Unable to compile file", scr_ast)
