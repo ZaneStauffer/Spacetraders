@@ -18,6 +18,7 @@ COMPLETE: shorthand for run command (just script name)
 TODO: register
 TODO: processes
 TODO: autocomplete for commands and scripts (tab completion)
+FIXME: index out of range when pressing enter on empty input (should just do nothing)
 
 =================
 ==== LOGGER =====
@@ -68,7 +69,7 @@ TODO: Implement caching middleware (low priority)
 =================
 For scripts that run game actions
 TODO: display_system.py: Display current system in a nice way (show all waypoints, etc)
-TODO: display_ship.py: Display current ship in a nice way (fuel, cargo, etc)
+COMPLETE: display_ship.py: Display current ship in a nice way (fuel, cargo, etc)
 TODO: Route planning script (heuristic, A*?)
 TODO: Mining script (mine asteroids, sell ore)
 TODO: Ship buying script (buy ships)
