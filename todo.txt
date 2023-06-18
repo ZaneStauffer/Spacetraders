@@ -14,7 +14,7 @@ commands:
 
 TODO: token
 COMPLETE: exec
-TODO: shorthand for run command (just script name)
+COMPLETE: shorthand for run command (just script name)
 TODO: register
 TODO: processes
 TODO: autocomplete for commands and scripts (tab completion)
