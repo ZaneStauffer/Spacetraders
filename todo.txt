@@ -57,6 +57,7 @@ FINISHED: Script metadata (name, description, etc) <- Use docstrings for this
 FINISHED: Run scripts from other scripts & log their context
 TODO: executor.execute() filepath argument should append directory base "../scripts/" for cleaner calling in scripts
 TODO: Spawn process for scripts (concurrency)
+TODO: Nested script folders
 FIXME: Executor should catch ALL exceptions and log them
 
 =================
