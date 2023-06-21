@@ -44,6 +44,11 @@ os.getenv() to fetch env var
 =================
 
 =================
+===== RATE ======
+=================
+TODO: Implement rate limiting middleware (account for bursts)
+
+=================
 ===== TESTS =====
 =================
 TODO: Implement pytest
