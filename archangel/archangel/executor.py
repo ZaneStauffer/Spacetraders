@@ -6,9 +6,11 @@ import spacetraders
 import inspect
 import json
 from colorama import Fore, Back, Style
+from pydantic import BaseModel
+import pprint
 # This module executes user scripts. It validates them, restricts size, spawns a new process, and executes it while providing API
 import logger
-from script_api import unwrap
+from script_api import unwrap, run
 from errors import ResponseException
 
 FILE_SIZE_LIMIT_MB = 1 #MB
@@ -23,6 +25,7 @@ def get_globals(client, args=[], result={}):
         "unwrap": unwrap,
         "ResponseException": ResponseException,
         "execute": execute,
+        "run":  run,
         "result": result
     }
     return _globals
@@ -59,8 +62,18 @@ def execute(file_path, client, args, result):
                 exec(compile(scr_ast, filename=file_path, mode='exec'), _globals, result)
                 # If the script is being executed from the cli, print the result
                 if context_name == "cli.py" and result["result"] is not None:
-                    pretty_result = json.dumps(result["result"], indent=4)
-                    logger.log("{r}".format(r=logger.colorize(pretty_result, Fore.WHITE)))
+                    # TODO: handle lists
+                    result = result["result"]
+                    # if is a basemodel object, do .json() to get dict. Else use json.dumps. Lastly, just print
+                    if isinstance(result, BaseModel): # Call .json of basemodel
+                        pprint.pprint(result.dict(), indent=4)
+                    # if is a list of base models, do .json() on each element and concat them into a string to print
+                    elif isinstance(result, list) and len(result) > 0 and isinstance(result[0], BaseModel):
+                        for item in result:
+                            pprint.pprint(item.dict(), indent=4)
+                    else: # Just print
+                        print(result)
+                    
             else: # If False or None, propagate error
                 # TODO: this error doesnt give much info about the error itself (line number, etc)
                 raise SyntaxError("Unable to compile file", scr_ast)

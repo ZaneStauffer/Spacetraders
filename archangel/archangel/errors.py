@@ -34,3 +34,8 @@ class ResponseException(Exception):
         return logger.colorize("ResponseException:", Fore.RED) + " Response status code is not 200. Status code: {0} Message: {1}"\
             .format(logger.colorize(str(self.status_code),Fore.RED),
                     logger.colorize(str(json.loads(self.message)["error"]["message"]), Fore.RED))
+# =====================================================
+# ============= Script Exceptions =====================
+class ScriptException(Exception):
+    def __init__(self, message):
+        self.message = message
