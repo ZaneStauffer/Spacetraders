@@ -1,3 +1,5 @@
+from spacetraders.models import Ship, GetMyShipResponse200
+from spacetraders.types import Response
 """Returns the ship given by the ship's symbol. Raises a ResponseException if the response code is not 200 (OK).
     
     Usage:
@@ -14,7 +16,9 @@
 
 try:
     if args == []:
-        raise Exception("No arguments provided")
-    result = unwrap(client.fleet.get_my_ship(args[0])) # Get the ship with the given id
+        raise Exception("No arguments provided. Please provide the system symbol.")
+    _ship_res: Response[GetMyShipResponse200] = client.fleet.get_my_ship(args[0]) # Get the system's waypoints
+    ship = _ship_res.parsed.data # Get the waypoints from the response
+    result = ship
 except ResponseException as e:
     raise e
